@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Zero RolePlay Forum by Zegar</title>
+<style>
+:root{--bg:#0f0f0f;--text:#eaeaea;--muted:#a6a6a6;--panel:#171717;--card:#1f1f1f;--accent:#ff7b00;--border:#2b2b2b;--input:#0b0b0b}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text)}
+.header{display:flex;gap:14px;align-items:center;justify-content:space-between;padding:14px 16px;background:#121212;border-bottom:1px solid var(--border)}
+.brand{display:flex;gap:10px;align-items:center}
+.logo{width:42px;height:42px;background:var(--accent);color:#111;display:flex;align-items:center;justify-content:center;border-radius:8px;font-weight:800}
+.title{font-size:18px;font-weight:800}
+.container{max-width:1100px;margin:18px auto;padding:0 12px}
+.section{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px}
+.section h2{margin:0 0 8px 0;color:var(--accent)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+.col{flex:1;min-width:240px}
+label{font-size:13px;color:var(--muted)}
+.input,textarea,select{width:100%;background:var(--input);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:8px;outline:none}
+textarea{min-height:100px;resize:vertical}
+.btn{background:#202020;color:var(--text);border:1px solid var(--border);padding:10px 12px;border-radius:8px;cursor:pointer}
+.btn.primary{background:var(--accent);color:#111;border:none}
+.badge{background:#111;border:1px solid var(--border);border-radius:8px;padding:6px 8px;font-size:13px}
+.small{color:var(--muted);font-size:13px}
+.post{margin-top:10px;padding:12px;background:#161616;border:1px solid var(--border);border-radius:8px}
+.post h3{margin:0 0 6px 0;color:var(--accent)}
+.meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.comment{margin-top:6px;background:#121212;border:1px solid var(--border);padding:8px;border-radius:6px}
+hr.sep{border:none;border-top:1px solid var(--border);margin:10px 0}
+.tmpl{white-space:pre-wrap;background:#0b0b0b;border:1px solid var(--border);padding:10px;border-radius:8px}
+.footer{padding:16px;text-align:center;color:var(--muted)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.right{margin-left:auto}
+.ip{cursor:pointer}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="brand">
+    <div class="logo">ZR</div>
+    <div>
+      <div class="title">Zero RolePlay <span class="small">by Zegar</span></div>
+      <div class="small">Oficijelni forum zajednice</div>
+    </div>
+  </div>
+  <div class="actions">
+    <div class="badge ip" id="ipbadge">IP: 188.165.192.24:3119</div>
+    <div id="authBox" class="badge">Niste ulogovani</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- AUTH -->
+  <div class="section" id="authSection">
+    <h2>Pristup</h2>
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <h3>Login</h3>
+          <div class="row">
+            <div class="col"><label>Nick</label><input class="input" id="loginName" placeholder="Nick"/></div>
+            <div class="col"><label>Lozinka</label><input type="password" class="input" id="loginPass" placeholder="Lozinka"/></div>
+          </div>
+          <div class="actions" style="margin-top:8px">
+            <button class="btn primary" id="loginBtn">Uloguj se</button>
+            <div class="small">Admin korisnik: <b>Zegar</b></div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card">
+          <h3>Registracija</h3>
+          <div class="row">
+            <div class="col"><label>Nick</label><input class="input" id="regName" placeholder="Nick"/></div>
+            <div class="col"><label>Lozinka</label><input type="password" class="input" id="regPass" placeholder="Lozinka"/></div>
+          </div>
+          <div class="actions" style="margin-top:8px">
+            <button class="btn" id="regBtn">Registruj</button>
+          </div>
+          <div class="small">Napomena: klijent-side demo; za produkciju treba server/baza.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOVA TEMA -->
+  <div class="section">
+    <h2>Napravi novu temu</h2>
+    <div class="row">
+      <div class="col">
+        <label>Sekcija</label>
+        <select class="input" id="newSection">
+          <option>Konkursi</option>
+          <option>Žalbe / Predlozi</option>
+          <option>Pohvale</option>
+          <option>Pitanja</option>
+          <option>IP servera</option>
+          <option>Staff tim</option>
+        </select>
+      </div>
+      <div class="col">
+        <label>Naslov</label>
+        <input class="input" id="newTitle" placeholder="Naslov teme"/>
+      </div>
+    </div>
+    <div style="margin-top:8px">
+      <label>Sadržaj</label>
+      <textarea id="newContent" placeholder="Tekst teme..."></textarea>
+    </div>
+    <div class="actions" style="margin-top:8px">
+      <button class="btn primary" id="createTopicBtn">Objavi temu</button>
+      <button class="btn" id="clearBtn">Očisti</button>
+      <div class="right small">Ulogovani: <span id="whoami">Gost</span></div>
+    </div>
+  </div>
+
+  <!-- KONKURSI + FORMULARI -->
+  <div class="section" id="konkursi">
+    <h2>Konkursi</h2>
+    <div class="card">
+      <h3>Formulari za prijavu (kopiraj i popuni)</h3>
+      <div class="row">
+        <div class="col">
+          <h4>Admin</h4>
+          <pre class="tmpl" id="tpl-admin">[ZeroRP] Konkurs za Admina
+
+1. Nick u igri:
+2. Godine:
+3. Level / Iskustvo:
+4. Zašto baš ti:
+5. Aktivnost (sati dnevno):
+6. Mic / Discord:
+7. Screenshots / Statovi:</pre>
+          <button class="btn" data-copy="tpl-admin">Kopiraj</button>
+        </div>
+        <div class="col">
+          <h4>Helper</h4>
+          <pre class="tmpl" id="tpl-helper">[ZeroRP] Konkurs za Helpera
+
+1. Nick u igri:
+2. Godine:
+3. Aktivnost:
+4. Iskustvo sa RP:
+5. Zašto želiš biti helper:</pre>
+          <button class="btn" data-copy="tpl-helper">Kopiraj</button>
+        </div>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <div class="col">
+          <h4>Lider</h4>
+          <pre class="tmpl" id="tpl-lider">[ZeroRP] Konkurs za Lidera
+
+1. Nick:
+2. Koja organizacija:
+3. Iskustvo vođenja:
+4. Planovi kao lider:</pre>
+          <button class="btn" data-copy="tpl-lider">Kopiraj</button>
+        </div>
+        <div class="col">
+          <h4>Promoter</h4>
+          <pre class="tmpl" id="tpl-promoter">[ZeroRP] Konkurs za Promotera
+
+1. Nick:
+2. Plata/kompenzacija (ako tražiš):
+3. Aktivnosti/promocije koje radiš:</pre>
+          <button class="btn" data-copy="tpl-promoter">Kopiraj</button>
+        </div>
+      </div>
+    </div>
+    <hr class="sep"/>
+    <div id="list-konkursi"></div>
+  </div>
+
+  <!-- ZALBE -->
+  <div class="section" id="zalbe">
+    <h2>Žalbe / Predlozi</h2>
+    <div id="list-zalbe"></div>
+  </div>
+
+  <!-- POHVALE -->
+  <div class="section" id="pohvale">
+    <h2>Pohvale</h2>
+    <div id="list-pohvale"></div>
+  </div>
+
+  <!-- PITANJA -->
+  <div class="section" id="pitanja">
+    <h2>Pitanja</h2>
+    <div id="list-pitanja"></div>
+  </div>
+
+  <!-- IP -->
+  <div class="section" id="ip">
+    <h2>IP servera</h2>
+    <div class="card">
+      <div class="actions">
+        <div class="badge ip" id="ip2">188.165.192.24:3119</div>
+        <div class="small">Klik na IP kopira adresu.</div>
+      </div>
+    </div>
+    <div id="list-ip"></div>
+  </div>
+
+  <!-- STAFF -->
+  <div class="section" id="staff">
+    <h2>Staff tim</h2>
+    <div class="small">Admin nalog: Zegar. Admin može brisati teme i komentare.</div>
+    <div id="list-staff"></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Zero RolePlay © 2025 — by Zegar
+</div>
+
+<script>
+// ---- Storage helpers
+function save(k,v){localStorage.setItem('zr_'+k, JSON.stringify(v))}
+function load(k){try{return JSON.parse(localStorage.getItem('zr_'+k))}catch(e){return null}}
+
+// ---- Data
+let posts = load('posts') || [
+  {id:'p1',sec:'Konkursi',title:'Dobrodošli na ZeroRP konkurs centar',content:'Koristi formular iznad i otvori novu temu sa popunjenim odgovorima.',author:'System',comments:[],t:Date.now()},
+  {id:'p2',sec:'Žalbe / Predlozi',title:'Pravila sekcije Žalbe',content:'Navedi dokaz (slike/video). Uvrede ili spam se brišu.',author:'System',comments:[],t:Date.now()},
+];
+let users = load('users') || [{name:'Zegar',pass:'zegaraudi123',role:'admin'}];
+let currentUser = load('currentUser') || null;
+
+// ---- UI refs
+const ipbadge = document.getElementById('ipbadge');
+const ip2 = document.getElementById('ip2');
+const whoami = document.getElementById('whoami');
+const authBox = document.getElementById('authBox');
+const container = document.querySelector('.container');
+
+// ---- Utils
+function escapeHtml(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
+function isAdmin(){return currentUser && currentUser.role==='admin'}
+function who(){return currentUser? currentUser.name : 'Gost'}
+function nowStr(ts){return new Date(ts).toLocaleString()}
+
+// ---- Auth UI
+function updateAuthBox(){
+  authBox.textContent = currentUser ? (currentUser.name+' • '+(isAdmin()?'Admin':'Korisnik')) : 'Niste ulogovani';
+  whoami.textContent = who();
+}
+
+// ---- Copy helpers
+function copyTextFrom(preId){
+  const t=document.getElementById(preId).textContent;
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(()=>alert('Formular kopiran'));
+  }else{
+    const ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); alert('Formular kopiran');
+  }
+}
+function copyIP(){
+  const ip='188.165.192.24:3119';
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(ip).then(()=>alert('IP kopiran'));
+  }else{
+    const ta=document.createElement('textarea'); ta.value=ip; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); alert('IP kopiran');
+  }
+}
+
+// ---- Render one section list
+function renderSection(sec, mountId){
+  const mount = document.getElementById(mountId);
+  const list = posts.filter(p=>p.sec===sec);
+  mount.innerHTML = '';
+  if(list.length===0){ mount.innerHTML = '<div class="small">Nema tema još.</div>'; return; }
+  list.forEach(p=>{
+    const canDel = isAdmin() || (currentUser && currentUser.name===p.author);
+    const post = document.createElement('div');
+    post.className = 'post';
+    post.innerHTML = `
+      <div class="meta">
+        <span class="badge">${escapeHtml(p.sec)}</span>
+        <span class="small">Autor: ${escapeHtml(p.author)}</span>
+        <span class="small">• ${nowStr(p.t)}</span>
+        ${canDel? '<button class="btn right" data-action="del-post" data-id="'+p.id+'">Obriši temu</button>' : ''}
+      </div>
+      <h3>${escapeHtml(p.title)}</h3>
+      <div class="small">Komentari: ${p.comments.length}</div>
+      <p style="white-space:pre-wrap">${escapeHtml(p.content)}</p>
+      <div class="card">
+        <div id="c_${p.id}"></div>
+        <div class="row" style="margin-top:6px">
+          ${currentUser? '' : '<div class="col"><input class="input" placeholder="Nick" data-field="guest-name-'+p.id+'"/></div>'}
+          <div class="col"><input class="input" placeholder="Napiši komentar..." data-field="comment-'+p.id+'"/></div>
+          <div class="col"><button class="btn" data-action="add-comment" data-id="${p.id}">Pošalji</button> ${isAdmin()?'<button class="btn" data-action="reply-zegar" data-id="'+p.id+'">Odgovori kao Zegar</button>':''}</div>
+        </div>
+      </div>
+    `;
+    mount.appendChild(post);
+    // render comments
+    const cdiv = post.querySelector('#c_'+p.id);
+    if(p.comments.length===0){ cdiv.innerHTML = '<div class="small">Nema komentara još.</div>'; }
+    else{
+      cdiv.innerHTML = '';
+      p.comments.forEach((c, idx)=>{
+        const nick = c.split(':')[0];
+        const canDelC = isAdmin() || (currentUser && currentUser.name===nick);
+        const cd = document.createElement('div');
+        cd.className = 'comment';
+        cd.innerHTML = `<div class="meta">
+          <strong style="color:var(--accent)">${escapeHtml(nick)}:</strong>
+          <span>${escapeHtml(c.slice(nick.length+1).trim())}</span>
+          ${canDelC? '<button class="btn right" data-action="del-comment" data-id="'+p.id+'" data-index="'+idx+'">Obriši</button>' : ''}
+        </div>`;
+        cdiv.appendChild(cd);
+      });
+    }
+  });
+}
+
+function renderAll(){
+  renderSection('Konkursi','list-konkursi');
+  renderSection('Žalbe / Predlozi','list-zalbe');
+  renderSection('Pohvale','list-pohvale');
+  renderSection('Pitanja','list-pitanja');
+  renderSection('IP servera','list-ip');
+  renderSection('Staff tim','list-staff');
+}
+
+// ---- Event delegation for all clicks
+container.addEventListener('click', (e)=>{
+  const t = e.target;
+  // copy template buttons
+  if(t.matches('[data-copy]')){
+    copyTextFrom(t.getAttribute('data-copy'));
+  }
+  // add comment
+  if(t.matches('[data-action="add-comment"]')){
+    const pid = t.getAttribute('data-id');
+    const p = posts.find(x=>x.id===pid); if(!p) return;
+    const commentInput = container.querySelector('[data-field="comment-'+pid+'"]');
+    let nick = currentUser? currentUser.name : (container.querySelector('[data-field="guest-name-'+pid+'"]')?.value.trim() || 'Anonim');
+    const txt = (commentInput?.value || '').trim();
+    if(!txt) { alert('Unesi komentar'); return; }
+    p.comments.push(nick+': '+txt);
+    save('posts',posts);
+    renderAll();
+  }
+  // delete post
+  if(t.matches('[data-action="del-post"]')){
+    const pid = t.getAttribute('data-id');
+    if(!(isAdmin() || (currentUser && posts.find(x=>x.id===pid)?.author===currentUser.name))) return alert('Nemaš dozvolu');
+    if(!confirm('Obrisati temu?')) return;
+    posts = posts.filter(x=>x.id!==pid);
+    save('posts',posts);
+    renderAll();
+  }
+  // delete comment
+  if(t.matches('[data-action="del-comment"]')){
+    const pid = t.getAttribute('data-id');
+    const idx = parseInt(t.getAttribute('data-index'),10);
+    const p = posts.find(x=>x.id===pid); if(!p) return;
+    if(!confirm('Obrisati komentar?')) return;
+    p.comments.splice(idx,1);
+    save('posts',posts);
+    renderAll();
+  }
+  // reply as Zegar
+  if(t.matches('[data-action="reply-zegar"]')){
+    if(!isAdmin()) return alert('Samo admin');
+    const pid = t.getAttribute('data-id');
+    const txt = prompt('Odgovor kao Zegar'); if(!txt) return;
+    const p = posts.find(x=>x.id===pid); if(!p) return;
+    p.comments.push('Zegar: '+txt);
+    save('posts',posts);
+    renderAll();
+  }
+});
+
+// ---- Buttons (non-delegated)
+document.getElementById('createTopicBtn').addEventListener('click', ()=>{
+  const sec = document.getElementById('newSection').value;
+  const title = document.getElementById('newTitle').value.trim();
+  const content = document.getElementById('newContent').value.trim();
+  if(!title || !content) return alert('Naslov i sadržaj su obavezni');
+  const author = currentUser ? currentUser.name : 'Anonim';
+  posts.unshift({id:uid(),sec,title,content,author,comments:[],t:Date.now()});
+  save('posts',posts);
+  document.getElementById('newTitle').value=''; document.getElementById('newContent').value='';
+  renderAll();
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+document.getElementById('clearBtn').addEventListener('click', ()=>{
+  document.getElementById('newTitle').value=''; document.getElementById('newContent').value='';
+});
+
+// ---- Auth buttons
+document.getElementById('regBtn').addEventListener('click', ()=>{
+  const n = document.getElementById('regName').value.trim();
+  const p = document.getElementById('regPass').value.trim();
+  if(!n || !p) return alert('Popuni nick i lozinku');
+  if(n.toLowerCase()==='zegar') return alert('Rezervisano ime');
+  if(users.find(u=>u.name===n)) return alert('Nick je zauzet');
+  users.push({name:n, pass:p, role:'user'});
+  save('users',users);
+  alert('Registrovan, sada se uloguj');
+});
+document.getElementById('loginBtn').addEventListener('click', ()=>{
+  const n = document.getElementById('loginName').value.trim();
+  const p = document.getElementById('loginPass').value.trim();
+  const u = users.find(u=>u.name===n && u.pass===p);
+  if(!u) return alert('Pogrešan nick ili lozinka');
+  currentUser = {name:u.name, role:u.role};
+  save('currentUser',currentUser);
+  updateAuthBox();
+  renderAll();
+  alert('Ulogovan: '+u.name);
+});
+
+// ---- IP copy
+ipbadge.addEventListener('click', copyIP);
+ip2.addEventListener('click', copyIP);
+
+// ---- Init
+updateAuthBox();
+renderAll();
+</script>
+</body>
+</html>
